@@ -21,7 +21,7 @@ impl Config{
 pub trait AppTrait: Send + Sync{
     fn tick(&mut self) -> f32;
 }
-
+// TODO: unable to track phase for multiple outputs(each group of frames must start with same phase and update phase in the end)
 impl ProcessHandler for Config {
     fn process(&mut self, _: &Client, ps: &ProcessScope) -> Control {
         for port in &mut self.output_ports {
