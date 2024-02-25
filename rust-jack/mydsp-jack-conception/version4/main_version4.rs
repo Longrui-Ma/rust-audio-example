@@ -27,23 +27,29 @@ fn main() -> Result<(), jack::Error> {
 
     let in_spec = AudioIn::default();
     let out_spec = AudioOut::default();
-    let input_ports = vec![client.register_port("input1", in_spec)?];
-    // let output_ports = vec![client.register_port("output1", spec)?, client.register_port("output2", spec)?, client.register_port("output3", spec)?];
-    let output_ports = vec![client.register_port("output1", out_spec)?];
+    let input_ports = vec![client.register_port("input1", in_spec)?, client.register_port("input2", in_spec)?, client.register_port("input3", in_spec)?];
+    let output_ports = vec![client.register_port("output1", out_spec)?, client.register_port("output2", out_spec)?, client.register_port("output3", out_spec)?];
+    // let input_ports = vec![client.register_port("input1", in_spec)?, client.register_port("input2", in_spec)?];
+    // let output_ports = vec![client.register_port("output1", out_spec)?, client.register_port("output2", out_spec)?];
+    // let input_ports = vec![client.register_port("input1", in_spec)?];
+    // let output_ports = vec![client.register_port("output1", out_spec)?];
     
     let sample_rate = client.sample_rate();
     // create app instance (trait object)
     let nframes_delay = sample_rate / 2;
-    let feedback = 0.8;
+    let feedback = 0.6;
+    let port_pairs = input_ports.len();
+    println!("port_pairs: {}", port_pairs);
     let size: usize = 4096;
     let frequency:f32 = 440.0;
     let gain:f32 = 0.5;
-    let app = Box::new(
-        Echo::new(nframes_delay, feedback,
-            Box::new(Echo::new(nframes_delay, 0.4, 
-                Box::new(Pwm::new(0.1, 2*sample_rate,
+    let app = 
+        Box::new(Echo::new(nframes_delay, feedback, port_pairs,
+            // Box::new(Echo::new(nframes_delay*2, 0.3, port_pairs,
+                Box::new(Pwm::new(0.1, 4*sample_rate,
                             Box::new(SineWave::new(sample_rate, size, None, frequency, gain))
-            ))))
+            // ))
+            ))
         )
     );
     // create config instance

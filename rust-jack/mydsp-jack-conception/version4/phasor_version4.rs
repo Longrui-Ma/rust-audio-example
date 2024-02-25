@@ -28,7 +28,7 @@ impl Phasor {
 }
 
 impl AppTrait for Phasor {
-    fn tick(&mut self, in_frame: f32) -> f32 {
+    fn tick(&mut self, _in_frame: f32, _port_index: usize) -> f32 {
         self.phase += self.phase_increment;
         self.phase -= self.phase.floor(); // phase wraps around 0 to 1
         self.phase

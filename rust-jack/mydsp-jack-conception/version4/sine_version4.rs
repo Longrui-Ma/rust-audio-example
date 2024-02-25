@@ -33,8 +33,8 @@ impl SineWave {
 
 // note that update phasor.phase NOT sine.phase
 impl AppTrait for SineWave {
-    fn tick(&mut self, in_frame: f32) -> f32 {
-        self.phase = self.phasor.tick(in_frame);
+    fn tick(&mut self, in_frame: f32, port_index: usize) -> f32 {
+        self.phase = self.phasor.tick(in_frame, port_index);
         self.sine_table.get_value(self.phase) * self.gain
     }
     fn save_init(&mut self) { 
